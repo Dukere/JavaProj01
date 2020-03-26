@@ -1,0 +1,169 @@
+package ver07;
+
+import java.util.HashSet;
+import java.util.InputMismatchException;
+import java.util.Iterator;
+import java.util.Scanner;
+import ver06.PhoneInfo;
+
+public class PhoneBookManager {
+
+	Scanner sc = new Scanner(System.in);
+	HashSet<Object> pi = new HashSet<Object>();
+	int stack = 0;
+	int check = 0;
+
+	public void printMenu() {
+
+		while (true) {
+			try {
+				System.out.println("선택하세요...");
+				System.out.println("1.데이터 입력");
+				System.out.println("2.데이터 검색");
+				System.out.println("3.데이터 삭제");
+				System.out.println("4.주소록 출력");
+				System.out.println("5.프로그램 종료");
+				System.out.print("선택:");
+				check = sc.nextInt();
+				sc.nextLine();
+				if (check < 1 || check > 5) {
+					MenuSelectException ex = new MenuSelectException();
+					throw ex;
+				}
+
+				switch (check) {
+				case MenuItem.INPUT:
+					dataInput();
+					break;
+				case MenuItem.SEARCH:
+					//dataSearch();
+					break;
+				case MenuItem.DELETE:
+					dataDelete();
+					break;
+				case MenuItem.SHOW:
+					dataAllShow();
+					break;
+				case MenuItem.EXIT:
+					System.out.println("프로그램 종료 . . ");
+					System.exit(0);
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("문자 입력 발생 .. 숫자 입력하세용");
+				sc.nextLine();
+			} catch (MenuSelectException e) {
+				System.out.println(e.getMessage());
+			} 
+		}
+	}
+
+	public void dataInput() {
+		try {
+		System.out.println("데이터 입력을 시작합니다..");
+		System.out.println("1.일반 2.동창 3.회사");
+		int check = sc.nextInt();
+		sc.nextLine();
+		if(check<1 || check > 3) {
+			MenuSelectException ex = new MenuSelectException();
+			throw ex;
+		}
+		System.out.print("이름 : ");
+		String name = sc.nextLine();
+		System.out.print("전화번호 : ");
+		String number = sc.nextLine();
+		switch (check) {
+		case SubMenuItem.NORMAL:
+			pi.add(new PhoneInfo(name, number));
+			System.out.println("데이터 입력이 완료되었습니다.");
+			stack++;
+			break;
+		case SubMenuItem.SCHOOL:
+			System.out.print("전공 : ");
+			String major = sc.nextLine();
+			System.out.print("학년 : ");
+			int grade = sc.nextInt();
+			sc.nextLine();
+			pi.add(new PhoneSchoolInfo(name, number, major, grade));
+			System.out.println("데이터 입력이 완료되었습니다.");
+			stack++;
+			break;
+		case SubMenuItem.COMPANY:
+			System.out.print("회사 : ");
+			String company = sc.nextLine();
+			pi.add(new PhoneCompanyInfo(name, number, company));
+			System.out.println("데이터 입력이 완료되었습니다.");
+			stack++;
+			break;
+		} 
+		}
+		catch(MenuSelectException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		}
+	
+
+	/*public void dataSearch() {
+
+		int check = 0;
+		System.out.println("데이터 검색을 시작합니다.");
+		System.out.print("이름 : ");
+		String name = sc.nextLine();
+
+		try {
+			if (pi.contains(name))
+			}
+			if (check == 0) {
+				NullPointerException ex = new NullPointerException();
+				throw ex;
+			}
+		} catch (NullPointerException e) {
+			System.out.println("찾는 데이터가 없습니다.");
+		}
+	}*/
+
+	public void dataDelete() {
+		System.out.println("데이터 삭제를 시작합니다.");
+		System.out.print("이름 : ");
+		String name = sc.nextLine();
+		int check = 0;
+		/*
+		 * if (stack == 0) { System.out.println("데이터가 없습니다."); NullPointerException ex =
+		 * new NullPointerException(); throw ex; } else {
+		 */
+		try {
+			for (int i = 0; i < stack; i++) {
+				// if (name.equals(pi[i].name)) {
+				// for (int j = i; j <= stack - 1; j++) {
+				// pi[j] = pi[j + 1];
+				// }
+				// stack--;
+				// check = 1;
+				// }
+			}
+			if (check == 0) {
+				NullPointerException ex = new NullPointerException();
+				throw ex;
+			}
+			System.out.println("삭제 완료");
+		} catch (NullPointerException e) {
+			System.out.println("찾는 데이터가 없습니다.");
+		}
+	}
+
+	public void dataAllShow() {
+		try {
+			for (Object obj : pi) {
+				System.out.println(obj);
+				stack =1;
+			}
+			if (stack == 0) {
+				NullPointerException ex = new NullPointerException();
+				throw ex;
+			}
+			System.out.println("데이터 출력이 완료되었습니다.");
+		} catch (NullPointerException e) {
+			System.out.println("데이터가 없습니다.");
+		}
+	}
+}
