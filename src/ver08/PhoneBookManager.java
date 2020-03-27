@@ -1,16 +1,39 @@
-package ver07;
+package ver08;
 
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
-import ver07.PhoneInfo;
+import ver08.PhoneInfo;
 
 public class PhoneBookManager {
 
 	Scanner sc = new Scanner(System.in);
-	HashSet<PhoneInfo> pi =new HashSet<PhoneInfo>(100);;
+	HashSet<PhoneInfo> pi = new HashSet<PhoneInfo>(100);;
 	int check = 0;
+
+	public PhoneBookManager() {
+		try {
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/ver08/PhoneBook.obj"));
+			while(true) {
+			PhoneInfo inData = (PhoneInfo)in.readObject();
+			if(inData == null) break;
+			pi.add(inData);
+			}
+			in.close();
+		} catch (IOException e) {
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+
+	}
 
 	public void printMenu() {
 
@@ -45,6 +68,10 @@ public class PhoneBookManager {
 					break;
 				case MenuItem.EXIT:
 					System.out.println("프로그램 종료 . . ");
+					ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/ver08/PhoneBook.obj"));
+					for (PhoneInfo info : pi) {
+						out.writeObject(info);
+					}
 					System.exit(0);
 				}
 			} catch (InputMismatchException e) {
@@ -52,10 +79,13 @@ public class PhoneBookManager {
 				sc.nextLine();
 			} catch (MenuSelectException e) {
 				System.out.println(e.getMessage());
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("저장 실패 . . .");
 			}
 		}
 	}
-	
+
 	public void adding(PhoneInfo pInfo) {
 		if (pInfo instanceof PhoneSchoolInfo) {
 			pInfo = (PhoneSchoolInfo) pInfo;
@@ -63,7 +93,7 @@ public class PhoneBookManager {
 		if (pInfo instanceof PhoneCompanyInfo) {
 			pInfo = (PhoneCompanyInfo) pInfo;
 		}
-		if(!pi.add(pInfo)) {
+		if (!pi.add(pInfo)) {
 			System.out.println("이름 중복 . . .");
 			System.out.println("1.덮어 쓰기, 2.다시 입력");
 			int check = sc.nextInt();
@@ -73,8 +103,7 @@ public class PhoneBookManager {
 				pi.add(pInfo);
 				System.out.println("데이터 입력이 완료되었습니다.");
 				return;
-			}
-			else if (check == 2) {
+			} else if (check == 2) {
 				return;
 			}
 		}
@@ -133,9 +162,9 @@ public class PhoneBookManager {
 		String name = sc.nextLine();
 		Iterator<PhoneInfo> itr = pi.iterator();
 		try {
-			while(itr.hasNext()) {
+			while (itr.hasNext()) {
 				PhoneInfo info = itr.next();
-				if(info.name.contains(name)) {
+				if (info.name.contains(name)) {
 					System.out.println("데이터를 찾았습니다.");
 					info.showPhoneInfo();
 					check = 1;
@@ -159,9 +188,9 @@ public class PhoneBookManager {
 		String name = sc.nextLine();
 		int check = 0;
 		try {
-			while(itr.hasNext()) {
+			while (itr.hasNext()) {
 				PhoneInfo info = itr.next();
-				if(info.name.equals(name)) {
+				if (info.name.equals(name)) {
 					System.out.println("데이터를 찾았습니다.");
 					pi.remove(info);
 					check = 1;

@@ -1,6 +1,8 @@
-package ver07;
+package ver08;
 
-public class PhoneInfo {
+import java.io.Serializable;
+
+public class PhoneInfo implements Serializable {
 	//멤버변수
 	String name;
 	String phoneNumber;

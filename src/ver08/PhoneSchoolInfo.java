@@ -1,4 +1,4 @@
-package ver07;
+package ver08;
 
 public class PhoneSchoolInfo extends PhoneInfo {
 	String major;

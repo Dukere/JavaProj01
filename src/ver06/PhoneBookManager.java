@@ -48,7 +48,7 @@ public class PhoneBookManager {
 				}
 			} catch (InputMismatchException e) {
 				System.out.println("문자 입력 발생 .. 숫자 입력하세용");
-				//sc.nextLine();
+				sc.nextLine();
 			} catch (MenuSelectException e) {
 				System.out.println(e.getMessage());
 			}
@@ -56,40 +56,53 @@ public class PhoneBookManager {
 	}
 
 	public void dataInput() {
-		System.out.println("데이터 입력을 시작합니다..");
-		System.out.println("1.일반 2.동창 3.회사");
-		int check = sc.nextInt();
-		sc.nextLine();
-		System.out.print("이름 : ");
-		String name = sc.nextLine();
-		System.out.print("전화번호 : ");
-		String number = sc.nextLine();
-		switch (check) {
-		case SubMenuItem.NORMAL:
-			pi[stack] = new PhoneInfo(name, number);
-			System.out.println("데이터 입력이 완료되었습니다.");
-			stack++;
-			break;
-		case SubMenuItem.SCHOOL:
-			System.out.print("전공 : ");
-			String major = sc.nextLine();
-			System.out.print("학년 : ");
-			int grade = sc.nextInt();
+		try {
+			System.out.println("데이터 입력을 시작합니다..");
+			System.out.println("1.일반 2.동창 3.회사");
+			int check = sc.nextInt();
+			if (check < 1 || check > 3) {
+				MenuSelectException ex = new MenuSelectException();
+				throw ex;
+			}
+
 			sc.nextLine();
-			pi[stack] = new PhoneSchoolInfo(name, number, major, grade);
-			System.out.println("데이터 입력이 완료되었습니다.");
-			stack++;
-			break;
-		case SubMenuItem.COMPANY:
-			System.out.print("회사 : ");
-			String company = sc.nextLine();
-			pi[stack] = new PhoneCompanyInfo(name, number, company);
-			System.out.println("데이터 입력이 완료되었습니다.");
-			stack++;
-			break;
-		default:
-			break;
+			System.out.print("이름 : ");
+			String name = sc.nextLine();
+			System.out.print("전화번호 : ");
+			String number = sc.nextLine();
+			switch (check) {
+			case SubMenuItem.NORMAL:
+				pi[stack] = new PhoneInfo(name, number);
+				System.out.println("데이터 입력이 완료되었습니다.");
+				stack++;
+				break;
+			case SubMenuItem.SCHOOL:
+				System.out.print("전공 : ");
+				String major = sc.nextLine();
+				System.out.print("학년 : ");
+				int grade = sc.nextInt();
+				sc.nextLine();
+				pi[stack] = new PhoneSchoolInfo(name, number, major, grade);
+				System.out.println("데이터 입력이 완료되었습니다.");
+				stack++;
+				break;
+			case SubMenuItem.COMPANY:
+				System.out.print("회사 : ");
+				String company = sc.nextLine();
+				pi[stack] = new PhoneCompanyInfo(name, number, company);
+				System.out.println("데이터 입력이 완료되었습니다.");
+				stack++;
+				break;
+			default:
+				break;
+			}
+		} catch (MenuSelectException e) {
+			System.out.println(e.getMessage());
+		} catch (InputMismatchException e) {
+			System.out.println("문자 입력 발생 .. 숫자 입력하세용");
+			sc.nextLine();
 		}
+
 	}
 
 	public void dataSearch() {
@@ -101,10 +114,12 @@ public class PhoneBookManager {
 
 		try {
 			for (int i = 0; i < stack; i++) {
-				pi[i].showPhoneInfo();
-				check = 1;
-				System.out.println("데이터 검색이 완료되었습니다.");
-				break;
+				if (name.equals(pi[i].name)) {
+					pi[i].showPhoneInfo();
+					check = 1;
+					System.out.println("데이터 검색이 완료되었습니다.");
+					break;
+				}
 			}
 			if (check == 0) {
 				NullPointerException ex = new NullPointerException();
@@ -121,11 +136,10 @@ public class PhoneBookManager {
 		System.out.print("이름 : ");
 		String name = sc.nextLine();
 		int check = 0;
-		/*if (stack == 0) {
-			System.out.println("데이터가 없습니다.");
-			NullPointerException ex = new NullPointerException();
-			throw ex;
-		} else {*/
+		/*
+		 * if (stack == 0) { System.out.println("데이터가 없습니다."); NullPointerException ex =
+		 * new NullPointerException(); throw ex; } else {
+		 */
 		try {
 			for (int i = 0; i < stack; i++) {
 				if (name.equals(pi[i].name)) {
@@ -136,7 +150,7 @@ public class PhoneBookManager {
 					check = 1;
 				}
 			}
-			if(check ==0) {
+			if (check == 0) {
 				NullPointerException ex = new NullPointerException();
 				throw ex;
 			}
@@ -144,21 +158,20 @@ public class PhoneBookManager {
 		} catch (NullPointerException e) {
 			System.out.println("찾는 데이터가 없습니다.");
 		}
-		}
-
+	}
 
 	public void dataAllShow() {
 		try {
-		System.out.println("데이터 출력을 시작하겠습니다.");
+			System.out.println("데이터 출력을 시작하겠습니다.");
 			for (int i = 0; i < stack; i++) {
 				pi[i].showPhoneInfo();
 			}
-			if(stack ==0) {
+			if (stack == 0) {
 				NullPointerException ex = new NullPointerException();
 				throw ex;
 			}
 			System.out.println("데이터 출력이 완료되었습니다.");
-		} catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			System.out.println("데이터가 없습니다.");
 		}
 	}
