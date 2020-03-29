@@ -55,12 +55,12 @@ public class PhoneBookManager {
 			case "2":
 				dataSearch();
 				break;
-	/*		case "3":
+			case "3":
 				dataDelete();
 				break;
 			case "4":
 				dataAllShow();
-				break;*/
+				break;
 			case "5":
 				System.out.println("프로그램 종료 . . ");
 				System.exit(0);
@@ -72,7 +72,7 @@ public class PhoneBookManager {
 	}
 
 	public void dataInput() {
-		String sql = "insert into phonebook_tb values (seq_phonebook, ?, ?, ?)";
+		String sql = "insert into phonebook_tb values(seq_phonebook.nextval, ?, ?, ?)";
 		System.out.println("데이터 입력을 시작합니다..");
 		System.out.print("이름 : ");
 		String name = sc.nextLine();
@@ -85,6 +85,7 @@ public class PhoneBookManager {
 			psmt.setString(1, name);
 			psmt.setString(2, number);
 			psmt.setString(3, birth);
+			psmt.executeUpdate();
 			System.out.println("데이터 입력이 완료되었습니다.");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -99,13 +100,13 @@ public class PhoneBookManager {
 		String search = sc.nextLine();
 		try {
 		stmt = con.createStatement();
-		String query = "SELECT name,phoneNum,birth FROM phonebook_tb where name = " + search + ";";
+		String query = "SELECT name,phoneNum,birth FROM phonebook_tb where name like '%" + search + "%'";
 		rs = stmt.executeQuery(query);
 		while(rs.next()) {
 			String name = rs.getString("name");
 			String number = rs.getString("phoneNum");
 			String birth = rs.getString("birth");
-			System.out.printf("이름 : &s\n 번호 : %s\n 생일 : %s",name,number ,birth);			
+			System.out.printf("이름 : %s\n 번호 : %s\n 생일 : %s\n", name, number ,birth);			
 			check = 1;
 		}
 		if (check == 0) {
@@ -116,42 +117,38 @@ public class PhoneBookManager {
 			e.printStackTrace();
 		}
 	}
-/*
+
 	public void dataDelete() {
+		String sql = "delete from phonebook_tb where name = ?";
 		System.out.println("데이터 삭제를 시작합니다.");
 		System.out.print("이름 : ");
 		String name = sc.nextLine();
-		int check = 0;
-		if (stack == 0) {
-			System.out.println("데이터가 없습니다.");
-		} else {
-			for (int i = 0; i < stack; i++) {
-				if (name.equals(pi[i].name)) {
-					for (int j = i; j <= stack - 1; j++) {
-						pi[j] = pi[j + 1];
-					}
-					stack--;
-					check = 1;
-				}
-			}
-			if (check == 0) {
-				System.out.println("데이터를 찾을 수 없습니다.");
-			} else {
-				System.out.println("데이터 삭제가 완료되었습니다.");
-			}
+		try {
+			psmt = con.prepareStatement(sql);
+			psmt.setString(1, name);
+			psmt.executeUpdate();
+			System.out.println("데이터 삭제가 완료되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 
 	}
 
 	public void dataAllShow() {
 		System.out.println("데이터 출력을 시작하겠습니다.");
-		if (stack == 0) {
-			System.out.println("데이터가 없습니다");
-		} else {
-			for (int i = 0; i < stack; i++) {
-				pi[i].showPhoneInfo();
+		try {
+			stmt = con.createStatement();
+			String query = "SELECT name,phoneNum,birth FROM phonebook_tb ";
+			rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				String name = rs.getString("name");
+				String number = rs.getString("phoneNum");
+				String birth = rs.getString("birth");
+				System.out.printf("이름 : %s\n 번호 : %s\n 생일 : %s\n", name, number ,birth);			
 			}
-			System.out.println("데이터 출력이 완료되었습니다.");
-		}
-	}*/
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+	}
 }

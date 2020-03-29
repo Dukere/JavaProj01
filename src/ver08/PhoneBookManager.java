@@ -181,18 +181,19 @@ public class PhoneBookManager {
 	}
 
 	public void dataDelete() {
-
+		int check = 0;
+		//arr<String>
 		Iterator<PhoneInfo> itr = pi.iterator();
 		System.out.println("데이터 삭제를 시작합니다.");
 		System.out.print("이름 : ");
 		String name = sc.nextLine();
-		int check = 0;
+
 		try {
 			while (itr.hasNext()) {
 				PhoneInfo info = itr.next();
 				if (info.name.equals(name)) {
 					System.out.println("데이터를 찾았습니다.");
-					pi.remove(info);
+					itr.remove();
 					check = 1;
 				}
 			}
