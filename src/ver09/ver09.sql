@@ -7,10 +7,18 @@ create table phonebook_tb (
 
 create sequence seq_phonebook
     increment by 1 
-    start with 1 
+    start with 0 
     nomaxvalue
-    minvalue 1 
+    minvalue 0
     nocycle 
     nocache; 
 
+drop sequence seq_phonebook;
+
+drop table phonebook_tb;
+
 commit;
+
+delete from phonebook_tb where name like '%1%';
+
+rollback;

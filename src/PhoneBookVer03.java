@@ -1,7 +1,4 @@
-import java.util.Scanner;
-
 import ver03.PhoneBookManager;
-import ver03.PhoneInfo;
 
 public class PhoneBookVer03 {
 	
