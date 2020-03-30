@@ -91,15 +91,17 @@ public class PhoneBookManager {
 		} else {
 			for (int i = 0; i < stack; i++) {
 				if (name.equals(pi[i].name)) {
+					System.out.println("----------------");
 					pi[i].showPhoneInfo();
 					check = 1;
-					System.out.println("데이터 검색이 완료되었습니다.");
-					break;
 				}
 			}
 			if (check == 0) {
 				System.out.println("데이터가 없습니다.");
+				return;
 			}
+			System.out.println("----------------");
+			System.out.println("데이터 검색이 완료되었습니다.");
 		}
 	}
 
@@ -135,8 +137,10 @@ public class PhoneBookManager {
 			System.out.println("데이터가 없습니다");
 		} else {
 			for (int i = 0; i < stack; i++) {
+				System.out.println("----------------");
 				pi[i].showPhoneInfo();
 			}
+			System.out.println("----------------");
 			System.out.println("데이터 출력이 완료되었습니다.");
 		}
 	}
